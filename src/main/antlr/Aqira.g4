@@ -16,16 +16,16 @@ WITH : 'with' ;
 REC : 'rec' ;
 FST : 'fst' ;
 SND : 'snd' ;
-LAM : 'fun' ;
+LAM : 'fn' ;
 UNIV : 'U' ;
 DEF : 'def' ;
 AT : 'at' ;
 NORMALIZE : 'normalize' ;
-QUIT : 'quit' ;
 
-decl :
-     | QUIT
-     | LET ID ':' term '=' term
+decls : decl* EOF
+      ;
+
+decl : LET ID ':' term '=' term
      ;
 
 term :
