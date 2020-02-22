@@ -1,7 +1,7 @@
 grammar Aqira ;
 
-fragment ID_FIRST : [a-zA-Z_'\\] ;
-ID : ID_FIRST ( ID_FIRST | [0-9] )* ;
+fragment ID_FIRST : [\p{Alpha}\p{General_Category=Other_Letter}] ;
+ID : ID_FIRST [\p{Alnum}\p{General_Category=Other_Letter}]* ;
 
 WHITESPACE : [ \t\r\n]+ -> skip ;
 
@@ -22,3 +22,12 @@ DEF : 'def' ;
 AT : 'at' ;
 NORMALIZE : 'normalize' ;
 QUIT : 'quit' ;
+
+decl :
+     | QUIT
+     | LET ID ':' term '=' term
+     ;
+
+term :
+     | ID
+     ;

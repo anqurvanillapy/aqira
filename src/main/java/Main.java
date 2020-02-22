@@ -1,4 +1,5 @@
-import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.concurrent.Callable;
 
 import picocli.CommandLine;
@@ -32,11 +33,16 @@ public class Main implements Callable<Integer> {
 @Command(name = "build", aliases = "b", description = "Build a source file.")
 class CmdBuild implements Callable<Integer> {
     @Parameters(index = "0")
-    private File file;
+    private Path srcpath;
 
     @Override
     public Integer call() {
-        System.out.println("Building file: " + file);
+        try {
+            Concrete.run(srcpath);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return 1;
+        }
         return 0;
     }
 }
@@ -44,11 +50,16 @@ class CmdBuild implements Callable<Integer> {
 @Command(name = "run", aliases = "r", description = "Run a source file.")
 class CmdRun implements Callable<Integer> {
     @Parameters(index = "0")
-    private File file;
+    private Path srcpath;
 
     @Override
     public Integer call() {
-        System.out.println("Running file: " + file);
+        try {
+            Concrete.run(srcpath);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return 1;
+        }
         return 0;
     }
 }
@@ -56,11 +67,16 @@ class CmdRun implements Callable<Integer> {
 @Command(name = "fmt", aliases = "f", description = "Format a source file.")
 class CmdFormat implements Callable<Integer> {
     @Parameters(index = "0")
-    private File file;
+    private Path srcpath;
 
     @Override
     public Integer call() {
-        System.out.println("Formatting file: " + file);
+        try {
+            Concrete.run(srcpath);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return 1;
+        }
         return 0;
     }
 }
