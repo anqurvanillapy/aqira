@@ -25,58 +25,39 @@ public class Main implements Callable<Integer> {
     }
 
     public static void main(String[] args) {
-        int exitCode = new CommandLine(new Main()).execute(args);
-        System.exit(exitCode);
+        System.exit(new CommandLine(new Main()).execute(args));
     }
 }
 
 @Command(name = "build", aliases = "b", description = "Build a source file.")
 class CmdBuild implements Callable<Integer> {
     @Parameters(index = "0")
-    private Path srcpath;
+    private Path src;
 
     @Override
     public Integer call() {
-        try {
-            ConcreteParser.run(srcpath);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return 1;
-        }
-        return 0;
+        return Compiler.build(src);
     }
 }
 
 @Command(name = "run", aliases = "r", description = "Run a source file.")
 class CmdRun implements Callable<Integer> {
     @Parameters(index = "0")
-    private Path srcpath;
+    private Path src;
 
     @Override
     public Integer call() {
-        try {
-            ConcreteParser.run(srcpath);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return 1;
-        }
-        return 0;
+        return Compiler.run(src);
     }
 }
 
 @Command(name = "fmt", aliases = "f", description = "Format a source file.")
 class CmdFormat implements Callable<Integer> {
     @Parameters(index = "0")
-    private Path srcpath;
+    private Path src;
 
     @Override
     public Integer call() {
-        try {
-            ConcreteParser.run(srcpath);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return 1;
-        }
-        return 0;
+        return Formatter.format(src);
     }
 }
