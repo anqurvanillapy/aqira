@@ -38,7 +38,7 @@ class CmdBuild implements Callable<Integer> {
     @Override
     public Integer call() {
         try {
-            Concrete.run(srcpath);
+            ConcreteParser.run(srcpath);
         } catch (IOException e) {
             e.printStackTrace();
             return 1;
@@ -55,7 +55,7 @@ class CmdRun implements Callable<Integer> {
     @Override
     public Integer call() {
         try {
-            Concrete.run(srcpath);
+            ConcreteParser.run(srcpath);
         } catch (IOException e) {
             e.printStackTrace();
             return 1;
@@ -72,7 +72,7 @@ class CmdFormat implements Callable<Integer> {
     @Override
     public Integer call() {
         try {
-            Concrete.run(srcpath);
+            ConcreteParser.run(srcpath);
         } catch (IOException e) {
             e.printStackTrace();
             return 1;

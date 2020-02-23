@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.nio.file.Path;
 
-public class Concrete {
+public class ConcreteParser {
     static class ConcreteListener extends AqiraBaseListener {
         @Override
         public void enterDecl(@NotNull AqiraParser.DeclContext ctx) {

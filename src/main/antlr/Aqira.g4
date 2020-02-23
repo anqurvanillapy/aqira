@@ -1,11 +1,13 @@
 grammar Aqira ;
 
-fragment ID_FIRST : [\p{Alpha}\p{General_Category=Other_Letter}] ;
-ID : ID_FIRST [\p{Alnum}\p{General_Category=Other_Letter}]* ;
+decls : decl* EOF
+      ;
 
-WHITESPACE : [ \t\r\n]+ -> skip ;
+decl : LET ID ':' term '=' term
+     ;
 
-COMMENT : '(*' ( COMMENT | . )*? '*)' -> skip ;
+term : ID
+     ;
 
 ZERO : 'zero' ;
 SUC : 'suc' ;
@@ -22,12 +24,9 @@ DEF : 'def' ;
 AT : 'at' ;
 NORMALIZE : 'normalize' ;
 
-decls : decl* EOF
-      ;
+fragment ID_FIRST : [\p{Alpha}\p{General_Category=Other_Letter}] ;
+ID : ID_FIRST [\p{Alnum}\p{General_Category=Other_Letter}]* ;
 
-decl : LET ID ':' term '=' term
-     ;
+WHITESPACE : [ \t\r\n]+ -> skip ;
 
-term :
-     | ID
-     ;
+COMMENT : '(*' ( COMMENT | . )*? '*)' -> skip ;
