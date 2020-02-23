@@ -22,7 +22,7 @@ public class ConcreteParser {
         CommonTokenStream tokens = new CommonTokenStream(lexer);
 
         AqiraParser parser = new AqiraParser(tokens);
-        ParseTree tree = parser.decls();
+        ParseTree tree = parser.top();
 
         ParseTreeWalker walker = new ParseTreeWalker();
         ConcreteListener listener = new ConcreteListener();

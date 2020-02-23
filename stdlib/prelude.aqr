@@ -1,3 +1,6 @@
 (* Prelude *)
 
-let a : T = a
+let id : (A : U[0]) -> (B : U[0]) -> (A -> B) -> (A -> B) =
+  fn A -> fn B -> fn x -> x
+
+normalize let id
