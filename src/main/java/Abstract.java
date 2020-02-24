@@ -1,146 +1,214 @@
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.Value;
-import org.antlr.v4.runtime.tree.TerminalNode;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
-interface AstNode {
-}
+public class Abstract extends AqiraBaseVisitor<Abstract.Node> {
+    interface Node {
+    }
 
-@Value
-class AstModule implements AstNode {
-    List<AstDecl> decls;
-}
+    @Value
+    static
+    class Module implements Node {
+        List<Decl> decls;
+    }
 
-@Value
-class Binder implements AstNode {
-    String name;
-    AstTerm body;
-}
-
-@Value
-class Binder2 implements AstNode {
-    String name1;
-    String name2;
-    AstTerm body;
-}
-
-interface AstTerm extends AstNode {
-}
-
-@Value
-class TermVar implements AstTerm {
-    String ident;
-}
-
-@Value
-class TermLet implements AstTerm {
-    AstTerm term;
-    Binder binder;
-}
-
-@Value
-class TermCheck implements AstTerm {
-    AstTerm term;
-    AstTerm type;
-}
-
-class TermNat implements AstTerm {
-}
-
-@Value
-class TermSuc implements AstTerm {
-    AstTerm term;
-}
-
-@Value
-class TermLit implements AstTerm {
-    int lit;
-}
-
-@Value
-class TermNatRec implements AstTerm {
-    Binder zeroPat;
-    AstTerm zero;
-    Binder2 sucPat;
-    AstTerm nat;
-}
-
-@Value
-class TermPi implements AstTerm {
-    AstTerm term;
-    Binder binder;
-}
-
-@Value
-class TermLam implements AstTerm {
-    Binder binder;
-}
-
-@Value
-class TermAp implements AstTerm {
-    AstTerm fn;
-    List<AstTerm> args;
-}
-
-@Value
-class TermSig implements AstTerm {
-    AstTerm term;
-    Binder binder;
-}
-
-@Value
-class TermPair implements AstTerm {
-    AstTerm fst;
-    AstTerm snd;
-}
-
-@Value
-class TermFst implements AstTerm {
-    AstTerm term;
-}
-
-@Value
-class TermSnd implements AstTerm {
-    AstTerm term;
-}
-
-@Value
-class TermUni implements AstTerm {
-    int level;
-}
-
-interface AstDecl extends AstNode {
-}
-
-@Value
-class DeclDef implements AstDecl {
-    String name;
-    AstTerm def;
-    AstTerm type;
-}
-
-@Value
-class DeclNormalizeLet implements AstDecl {
-    String name;
-}
-
-@Value
-class DeclNormalizeTerm implements AstDecl {
-    AstTerm term;
-    AstTerm type;
-}
-
-public class Abstract extends AqiraBaseVisitor<AstNode> {
     @Override
-    public AstNode visitTop(@NotNull AqiraParser.TopContext ctx) {
-        final List<AstDecl> ast = new ArrayList<>();
+    public Node visitTop(@NotNull AqiraParser.TopContext ctx) {
+        final List<Decl> ast = new ArrayList<>();
 
         for (AqiraParser.DeclContext decl : ctx.decl()) {
-            ast.add((AstDecl) visit(decl));
+            ast.add((Decl) visit(decl));
         }
 
-        return new AstModule(ast);
+        return new Module(ast);
+    }
+
+    interface Decl extends Node {
+    }
+
+    @AllArgsConstructor
+    enum DeclKind {
+        DEF(0),
+        NORMALIZE_LET(1),
+        NORMALIZE_EXPR(2);
+
+        @Getter
+        private final int value;
+
+        @Nullable
+        public static DeclKind of(int v) {
+            for (DeclKind kind : DeclKind.values()) {
+                if (kind.getValue() == v) {
+                    return kind;
+                }
+            }
+            return null;
+        }
+    }
+
+    @Value
+    static
+    class DeclDef implements Decl {
+        String name;
+        Term def;
+        Term type;
+    }
+
+    @Value
+    static
+    class DeclNormalizeLet implements Decl {
+        String name;
+    }
+
+    @Value
+    static
+    class DeclNormalizeTerm implements Decl {
+        Term term;
+        Term type;
+    }
+
+    @Override
+    public Node visitDecl(@NotNull AqiraParser.DeclContext ctx) {
+        DeclKind kind = DeclKind.of(ctx.getRuleIndex());
+        if (kind == null) {
+            return null;
+        }
+
+        switch (kind) {
+            case DEF:
+                return new DeclDef(
+                        ctx.ID().toString(),
+                        (Term) visit(ctx.expr(0)),
+                        (Term) visit(ctx.expr(1)));
+
+            case NORMALIZE_LET:
+                return new DeclNormalizeLet(ctx.ID().toString());
+
+            case NORMALIZE_EXPR:
+                return new DeclNormalizeTerm(
+                        (Term) visit(ctx.expr(0)),
+                        (Term) visit(ctx.expr(1)));
+        }
+
+        return null;
+    }
+
+    interface Term extends Node {
+    }
+
+    @Value
+    static
+    class Binder implements Node {
+        String name;
+        Term body;
+    }
+
+    @Value
+    static
+    class Binder2 implements Node {
+        String name1;
+        String name2;
+        Term body;
+    }
+
+    @Value
+    static
+    class TermVar implements Term {
+        String ident;
+    }
+
+    @Value
+    static
+    class TermLet implements Term {
+        Term term;
+        Binder binder;
+    }
+
+    @Value
+    static
+    class TermCheck implements Term {
+        Term term;
+        Term type;
+    }
+
+    static class TermNat implements Term {
+    }
+
+    @Value
+    static
+    class TermSuc implements Term {
+        Term term;
+    }
+
+    @Value
+    static
+    class TermLit implements Term {
+        int lit;
+    }
+
+    @Value
+    static
+    class TermNatRec implements Term {
+        Binder zeroPat;
+        Term zero;
+        Binder2 sucPat;
+        Term nat;
+    }
+
+    @Value
+    static
+    class TermPi implements Term {
+        Term term;
+        Binder binder;
+    }
+
+    @Value
+    static
+    class TermLam implements Term {
+        Binder binder;
+    }
+
+    @Value
+    static
+    class TermAp implements Term {
+        Term fn;
+        List<Term> args;
+    }
+
+    @Value
+    static
+    class TermSig implements Term {
+        Term term;
+        Binder binder;
+    }
+
+    @Value
+    static
+    class TermPair implements Term {
+        Term fst;
+        Term snd;
+    }
+
+    @Value
+    static
+    class TermFst implements Term {
+        Term term;
+    }
+
+    @Value
+    static
+    class TermSnd implements Term {
+        Term term;
+    }
+
+    @Value
+    static
+    class TermUni implements Term {
+        int level;
     }
 }
