@@ -1,7 +1,9 @@
 plugins {
     id 'java'
     id 'application'
+
     id 'antlr'
+    id "io.freefair.lombok" version "5.0.0-rc4"
 }
 
 group 'io.anqur'
