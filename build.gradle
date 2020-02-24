@@ -3,7 +3,7 @@ plugins {
     id 'application'
 
     id 'antlr'
-    id "io.freefair.lombok" version "5.0.0-rc4"
+    id 'io.freefair.lombok' version '5.0.0-rc4'
 }
 
 group 'io.anqur'
@@ -12,7 +12,7 @@ version '1.0-SNAPSHOT'
 sourceCompatibility = 1.11
 
 ext {
-    javaMainClass = "Main"
+    javaMainClass = 'Main'
 }
 
 application {
@@ -33,11 +33,15 @@ dependencies {
 jar {
     manifest {
         attributes(
-                "Main-Class": javaMainClass
+                'Main-Class': javaMainClass
         )
     }
 
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
+}
+
+generateGrammarSource {
+    arguments += ["-visitor"]
 }

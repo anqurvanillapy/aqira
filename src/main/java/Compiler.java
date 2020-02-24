@@ -1,13 +1,11 @@
-import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.ParseTreeWalker;
-
 import java.io.IOException;
 import java.nio.file.Path;
 
 public class Compiler {
     public static int build(Path src) {
         try {
-            new ParseTreeWalker().walk(new Abstract(), Concrete.parse(src));
+            AstNode ast = new Abstract().visit(Concrete.parse(src));
+            System.out.println(ast);
         } catch (IOException e) {
             e.printStackTrace();
             return 1;

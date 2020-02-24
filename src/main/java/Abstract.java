@@ -2,22 +2,31 @@ import lombok.Value;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
+interface AstNode {
+}
+
 @Value
-class Binder {
+class AstModule implements AstNode {
+    List<AstDecl> decls;
+}
+
+@Value
+class Binder implements AstNode {
     String name;
     AstTerm body;
 }
 
 @Value
-class Binder2 {
+class Binder2 implements AstNode {
     String name1;
     String name2;
     AstTerm body;
 }
 
-interface AstTerm {
+interface AstTerm extends AstNode {
 }
 
 @Value
@@ -102,7 +111,7 @@ class TermUni implements AstTerm {
     int level;
 }
 
-interface AstDecl {
+interface AstDecl extends AstNode {
 }
 
 @Value
@@ -123,17 +132,15 @@ class DeclNormalizeTerm implements AstDecl {
     AstTerm type;
 }
 
-public class Abstract extends AqiraBaseListener {
-    List<AstDecl> ast;
-
+public class Abstract extends AqiraBaseVisitor<AstNode> {
     @Override
-    public void enterTop(@NotNull AqiraParser.TopContext ctx) {
-        System.out.println("[build] Enter TOP");
-    }
+    public AstNode visitTop(@NotNull AqiraParser.TopContext ctx) {
+        final List<AstDecl> ast = new ArrayList<>();
 
-    @Override
-    public void enterDecl(@NotNull AqiraParser.DeclContext ctx) {
-        TerminalNode node = ctx.ID();
-        System.out.println("[build] Enter decl: " + node);
+        for (AqiraParser.DeclContext decl : ctx.decl()) {
+            ast.add((AstDecl) visit(decl));
+        }
+
+        return new AstModule(ast);
     }
 }
