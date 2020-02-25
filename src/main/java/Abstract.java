@@ -2,7 +2,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Value;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import util.EnumOf;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,22 +32,16 @@ public class Abstract extends AqiraBaseVisitor<Abstract.Node> {
     }
 
     @AllArgsConstructor
-    enum DeclKind {
+    enum DeclKind implements EnumOf<Integer> {
         DEF(0),
         NORMALIZE_LET(1),
         NORMALIZE_EXPR(2);
 
         @Getter
-        private final int value;
+        private final Integer value;
 
-        @Nullable
         public static DeclKind of(int v) {
-            for (DeclKind kind : DeclKind.values()) {
-                if (kind.getValue() == v) {
-                    return kind;
-                }
-            }
-            return null;
+            return EnumOf.enumOf(DeclKind.class, v);
         }
     }
 
