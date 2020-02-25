@@ -2,10 +2,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Value;
 import org.jetbrains.annotations.NotNull;
-import util.EnumOf;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import util.EnumOf;
 
 public class Abstract extends AqiraBaseVisitor<Abstract.Node> {
     interface Node {
@@ -39,10 +40,6 @@ public class Abstract extends AqiraBaseVisitor<Abstract.Node> {
 
         @Getter
         private final Integer value;
-
-        public static DeclKind of(int v) {
-            return EnumOf.enumOf(DeclKind.class, v);
-        }
     }
 
     @Value
@@ -68,7 +65,7 @@ public class Abstract extends AqiraBaseVisitor<Abstract.Node> {
 
     @Override
     public Node visitDecl(@NotNull AqiraParser.DeclContext ctx) {
-        DeclKind kind = DeclKind.of(ctx.getRuleIndex());
+        DeclKind kind = EnumOf.enumOf(DeclKind.class, ctx.getRuleIndex());
         if (kind == null) {
             return null;
         }

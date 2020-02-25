@@ -1,11 +1,11 @@
-import java.nio.file.Path;
-import java.util.concurrent.Callable;
-
 import picocli.CommandLine;
 import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Spec;
 import picocli.CommandLine.Parameters;
+
+import java.nio.file.Path;
+import java.util.concurrent.Callable;
 
 @Command(name = "aqira", version = "Aqira 0.1.0", description = "Aqira",
         mixinStandardHelpOptions = true, subcommands = {
