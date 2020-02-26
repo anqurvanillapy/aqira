@@ -4,7 +4,7 @@ import java.nio.file.Path;
 public class Compiler {
     public static int build(Path src) {
         try {
-            Abstract.Node ast = new Abstract().visit(Concrete.parse(src));
+            Concrete.Node ast = new Concrete().visit(ConcreteParser.parse(src));
             System.out.println(ast);
         } catch (IOException e) {
             e.printStackTrace();

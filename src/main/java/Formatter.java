@@ -22,7 +22,7 @@ public class Formatter {
     public static int format(Path src) {
         try {
             new ParseTreeWalker().walk(new PrettyPrinter(),
-                    Concrete.parse(src));
+                    ConcreteParser.parse(src));
         } catch (IOException e) {
             e.printStackTrace();
             return 1;
