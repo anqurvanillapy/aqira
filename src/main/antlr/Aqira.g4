@@ -4,15 +4,15 @@ top : decl* EOF ;
 
 decl : LET ID ':' expr '=' expr
      | NORMALIZE LET ID
-     | NORMALIZE expr AT expr
+     | NORMALIZE expr OF expr
      ;
 
 expr : term+
      | LET ID ':' expr '=' expr IN expr
      | LET ID '=' expr IN expr
-     | '(' expr AT expr ')'
+     | '(' expr OF expr ')'
      | SUC expr
-     | REC expr AT ID ARROW expr ON
+     | REC expr OF ID ARROW expr ON
        '|' ZERO ARROW expr
        '|' SUC ID ',' ID ARROW expr
      | LAM ID ARROW expr
@@ -25,7 +25,7 @@ expr : term+
      ;
 
 term : '(' expr ')'
-     | '(' expr AT expr ')'
+     | '(' expr OF expr ')'
      | ID
      | ZERO
      | NUMERAL
@@ -45,7 +45,7 @@ FST : 'fst' ;
 SND : 'snd' ;
 LAM : 'fn' ;
 UNIV : 'U' ;
-AT : 'at' ;
+OF : 'of' ;
 NORMALIZE : 'normalize' ;
 
 ARROW : '->' ;
