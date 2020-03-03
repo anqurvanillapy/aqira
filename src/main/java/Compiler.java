@@ -1,6 +1,13 @@
 import java.io.IOException;
 import java.nio.file.Path;
 
+class ScopeCheck {
+    static class Env {
+        int size;
+        // TODO
+    }
+}
+
 public class Compiler {
     public static int build(Path src) {
         try {

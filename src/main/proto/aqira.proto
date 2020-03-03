@@ -1,0 +1,92 @@
+syntax = "proto3";
+
+package aqira.ir;
+option java_package = "ir";
+option java_outer_classname = "IrProto";
+
+message Term {
+    oneof kind {
+        Var var = 1;
+        Let let = 2;
+        Check check = 3;
+        Nat nat = 4;
+        Zero zero = 5;
+        Suc suc = 6;
+        NRec nrec = 7;
+        Pi pi = 8;
+        Lam lam = 9;
+        Ap ap = 10;
+        Sig sig = 11;
+        Pair pair = 12;
+        Fst fst = 13;
+        Snd snd = 14;
+        Uni uni = 15;
+    }
+
+    message Var {
+        int32 dbi = 1;
+    }
+
+    message Let {
+        Term term = 1;
+        Term binder = 2;
+    }
+
+    message Check {
+        Term term = 1;
+        Term expr = 2;
+    }
+
+    message Nat {
+    }
+
+    message Zero {
+    }
+
+    message Suc {
+        Term term = 1;
+    }
+
+    message NRec {
+        Term term1 = 1;
+        Term binder1 = 2;
+        Term term2 = 3;
+        Term binder2 = 4;
+    }
+
+    message Pi {
+        Term term = 1;
+        Term binder = 2;
+    }
+
+    message Lam {
+        Term binder = 1;
+    }
+
+    message Ap {
+        Term fn = 1;
+        Term arg = 2;
+    }
+
+    message Sig {
+        Term term = 1;
+        Term binder = 2;
+    }
+
+    message Pair {
+        Term fst = 1;
+        Term snd = 2;
+    }
+
+    message Fst {
+        Term term = 1;
+    }
+
+    message Snd {
+        Term term = 1;
+    }
+
+    message Uni {
+        int32 level = 1;
+    }
+}
