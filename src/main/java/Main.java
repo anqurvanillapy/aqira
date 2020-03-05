@@ -7,7 +7,8 @@ import picocli.CommandLine.Parameters;
 import java.nio.file.Path;
 import java.util.concurrent.Callable;
 
-@Command(name = "aqira", version = "Aqira 0.1.0", description = "Aqira",
+@Command(name = "aqira", version = "Aqira 0.1.0",
+        description = "Aqira theorem prover",
         mixinStandardHelpOptions = true, subcommands = {
         CmdBuild.class,
         CmdRun.class,
